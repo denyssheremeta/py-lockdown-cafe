@@ -15,7 +15,16 @@ class Cafe:
         if "vaccine" not in visitor:
             raise NotVaccinatedError("Visitor must be vaccinated.")
 
-        expiration_date = visitor["vaccine"].get("expiration_date")
+        vaccine_info = visitor["vaccine"]
+
+        expiration_date = vaccine_info.get("expiration_date")
+
+        if expiration_date is None:
+            raise OutdatedVaccineError("Vaccine expiration date is missing.")
+
+        if not isinstance(expiration_date, datetime.date):
+            raise OutdatedVaccineError("Invalid expiration date format.")
+
         if expiration_date < datetime.date.today():
             raise OutdatedVaccineError("Vaccine is outdated.")
 
